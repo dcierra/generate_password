@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 from random import choice
 
 
@@ -92,6 +93,8 @@ class Ui_GeneratePassword(object):
         self.show_result()
         self.gen_pas = []
 
+        self.error = QMessageBox()
+
 
     def retranslateUi(self, GeneratePassword):
         _translate = QtCore.QCoreApplication.translate
@@ -121,14 +124,20 @@ class Ui_GeneratePassword(object):
         if lenght > 0 and lenght < 31:
             password = ''
             if not self.gen_pas:
-                self.output_password.setText('Выберите хотя бы один пункт')
+                self.error.setWindowTitle('Ошибка')
+                self.error.setText('Выберите хотя бы один пункт')
+                self.error.setIcon(QMessageBox.Warning)
+                self.error.exec_()
             else:
                 for i in range(lenght):
                     password += choice(self.gen_pas)
                 self.output_password.setText(f'Пароль: {password}')
                 self.gen_pas = []
         else:
-            self.output_password.setText(f'Длина пароля должна быть не меньше 1 и не больше 30')
+            self.error.setWindowTitle('Ошибка')
+            self.error.setText('Длина пароля должна быть не меньше 1 и не больше 30')
+            self.error.setIcon(QMessageBox.Warning)
+            self.error.exec_()
 
 
 if __name__ == "__main__":
